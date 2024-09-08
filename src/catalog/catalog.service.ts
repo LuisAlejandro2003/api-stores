@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Catalog } from './interfaces/catalog.interface'; // Define la interfaz Catalog
-import { CreateItemDto } from './dto/create-item.dto'; // Suponiendo que tienes un DTO para crear un item
+import { CreateCatalogDto } from './dto/create-catalog.dto'; // Suponiendo que tienes un DTO para crear un item
 
 @Injectable()
 export class CatalogService {
@@ -14,8 +14,8 @@ export class CatalogService {
   }
 
   // Crear un nuevo producto en el catálogo
-  async create(createItemDto: CreateItemDto): Promise<Catalog> {
-    const newItem = new this.catalogModel(createItemDto);
+  async create(CreateCatalogDto: CreateCatalogDto): Promise<Catalog> {
+    const newItem = new this.catalogModel(CreateCatalogDto);
     return await newItem.save();
   }
 

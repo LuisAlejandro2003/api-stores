@@ -1,4 +1,4 @@
-export class CreateItemDto {
+export class CreateCatalogDto {
     readonly name: string;
     readonly description: string;
     readonly price: number;

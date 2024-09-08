@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
-import { CreateItemDto } from './dto/create-item.dto'; 
+import { CreateCatalogDto } from './dto/create-catalog.dto'; 
 
 @Controller('catalog')  
 export class CatalogController {
@@ -12,8 +12,8 @@ export class CatalogController {
   }
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.catalogService.create(createItemDto); 
+  create(@Body() CreateCatalogDto: CreateCatalogDto) {
+    return this.catalogService.create(CreateCatalogDto); 
   }
 
   @Delete(':id')

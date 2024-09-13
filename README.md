@@ -81,11 +81,21 @@ El proyecto utiliza un archivo de variables de entorno llamado .env. Este archiv
 Crea un archivo llamado .env en la raíz del proyecto.
 Copia y pega el siguiente contenido en el archivo .env:
 
+# Configuración del puerto de la aplicación
+PORT=3000
+
+# Conexión a la base de datos MongoDB
+MONGODB_URI= mongodb://localhost:27017/florista
+
+# Otras configuraciones
+NODE_ENV=development
+
+
 # Puerto en el que la API estará disponible
 PORT=3000
 
 # URI de conexión a MongoDB (local o MongoDB Atlas)
-MONGODB_URI=mongodb://localhost:27017/floristaDB
+MONGODB_URI=mongodb://localhost:27017/florista
 
 # Entorno de ejecución
 NODE_ENV=development
@@ -124,26 +134,22 @@ Con la base de datos funcionando y el archivo .env correctamente configurado, pu
 1. Modo Desarrollo (recomendado para desarrollo):
 Este modo recarga automáticamente el servidor cada vez que detecta cambios en el código. Para ejecutar en este modo, usa el siguiente comando:
 
-bash
-Copiar código
+
 npm run start:dev
 El proyecto estará disponible en http://localhost:3000.
 
 2. Modo Producción (para despliegue en producción):
 Para ejecutar la aplicación en modo producción, primero debes compilarla y luego ejecutarla:
 
-bash
-Copiar código
+
 npm run build
 npm run start:prod
 En este modo, se usa la versión optimizada para producción.
 
 3. Otros modos de ejecución:
 Ejecutar en modo observador (watch mode):
-bash
-Copiar código
 npm run start:dev
+
 Ejecutar en modo depuración (debug mode):
-bash
-Copiar código
 npm run start:debug
+

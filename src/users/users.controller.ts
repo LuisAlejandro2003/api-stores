@@ -1,40 +1,62 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @HttpCode(HttpStatus.CREATED) // 201 Created
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    try {
+      const newUser = await this.usersService.create(createUserDto);
+      return res.status(HttpStatus.CREATED).json(newUser);
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Error creating user', error: error.message });
+    }
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @HttpCode(HttpStatus.OK) // 200 OK
+  async findAll(@Res() res: Response) {
+    try {
+      const users = await this.usersService.findAll();
+      return res.status(HttpStatus.OK).json(users);
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching users', error: error.message });
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const user = await this.usersService.findOne(id);
+      return res.status(HttpStatus.OK).json(user); // 200 OK
+    } catch (error) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: `User with ID ${id} not found` }); // 404 Not Found
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() res: Response) {
+    try {
+      const updatedUser = await this.usersService.update(id, updateUserDto);
+      return res.status(HttpStatus.OK).json(updatedUser); // 200 OK
+    } catch (error) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: `User with ID ${id} not found` }); // 404 Not Found
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
-  }
-
-  // Endpoint para obtener todas las tiendas de un usuario
-  @Get(':id/stores')
-  findStoresByUser(@Param('id') userId: string) {
-    return this.usersService.findStoresByUser(userId);
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    try {
+      await this.usersService.remove(id);
+      return res.status(HttpStatus.NO_CONTENT).send(); // 204 No Content
+    } catch (error) {
+      return res.status(HttpStatus.NOT_FOUND).json({ message: `User with ID ${id} not found` }); // 404 Not Found
+    }
   }
 }
